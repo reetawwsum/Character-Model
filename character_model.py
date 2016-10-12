@@ -34,15 +34,21 @@ def run(param):
 		output, _ = tf.nn.dynamic_rnn(cell, input_sequence, dtype=tf.float32, time_major=True)
 
 		# Calculating output at each time step
-		output = tf.reshape(output, [-1, num_units])
-		logits = tf.matmul(output, weight) + bias
+		reshaped_output = tf.reshape(output, [-1, num_units])
+		logits = tf.matmul(reshaped_output, weight) + bias
 		predictions = tf.nn.softmax(logits)
+
+		# Reshaping the logits to calculate loss
+		reshaped_logits = tf.reshape(logits, [num_unrollings, batch_size, vocabulary_size])
 
 		# Adding loss op
 		loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, output_sequence))
 
 		# Adding optimizer
 		optimizer = tf.train.AdamOptimizer().minimize(loss)
+
+		# Creating saver to store model
+		saver = tf.train.Saver()
 
 	# Getting dataset
 	text = read_data(dataset_path, dataset)
@@ -72,6 +78,8 @@ def run(param):
 					if step > 0:
 						average_loss /= 500
 						print('Average loss at step %d: %f' % (step, average_loss))
+
+			saver.save(sess, 'dataset/character-model')
 
 if __name__ == '__main__':
 	run('training')
