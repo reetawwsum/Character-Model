@@ -6,9 +6,6 @@ import zipfile
 import numpy as np
 import tensorflow as tf
 
-dataset_path = 'dataset/'
-dataset = 'text8.zip'
-
 def read_data(dataset_path, dataset):
 	'''Reading dataset as a string'''
 	with zipfile.ZipFile(dataset_path + dataset) as f:
@@ -87,6 +84,9 @@ def batch2string(batches):
 	return s
 
 if __name__ == '__main__':
+	dataset_path = 'dataset/'
+	dataset = 'text8.zip'
+	
 	text = read_data(dataset_path, dataset)
 	train_text, validation_text = split_dataset(text, validation_size=1000)
 
