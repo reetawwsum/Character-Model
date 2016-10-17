@@ -67,9 +67,10 @@ class BatchGenerator():
 		self.batch_dataset_type = config.batch_dataset_type
 
 		self.load_dataset()
+		self.train_size = len(self.train_data)
 
-		assert len(self.train_data) % self.batch_size == 0, 'Train size should be divisible by batch size'
-		segment = len(self.train_data) / self.batch_size
+		assert self.train_size % self.batch_size == 0, 'Train size should be divisible by batch size'
+		segment = self.train_size / self.batch_size
 
 		assert segment > self.num_unrollings, 'Segment (train size/batch size) should be greater than num_unrollings'
 		assert segment % self.num_unrollings == 0, 'Segment (train size/batch size) should be divisble by num_unrollings'
@@ -86,7 +87,7 @@ class BatchGenerator():
 
 		for i in xrange(self.num_unrollings + 1):
 			sequence[i, char2id(self.train_data[self.cursor[position]])] = 1.0
-			self.cursor[position] = (self.cursor[position] + 1) % len(self.train_data)
+			self.cursor[position] = (self.cursor[position] + 1) % self.train_size
 
 		return sequence
 
