@@ -12,12 +12,12 @@ class Model:
 		self.num_units = config.num_units
 		self.num_hidden_layers = config.num_hidden_layers
 		self.learning_rate = config.learning_rate
-		self.input_keep_prob_value = config.input_keep_prob
-		self.output_keep_prob_value = config.output_keep_prob
+		self.train_input_keep_prob = config.input_keep_prob
+		self.train_output_keep_prob = config.output_keep_prob
 		self.epochs = config.epochs
 		self.batch_size = config.batch_size
 		self.num_unrollings = config.num_unrollings
-		self.checkpoint_step = config.checkpoint_step
+		self.checkpoint_epoch = config.checkpoint_epoch
 		self.input_size = len(string.ascii_lowercase) + 1
 		self.output_size = self.input_size
 
@@ -90,17 +90,16 @@ class Model:
 			train_batches = BatchGenerator(self.config)
 
 			steps_in_one_epoch = ((train_batches.train_size / self.batch_size) / self.num_unrollings)
+			checkpoint_step = self.checkpoint_epoch * steps_in_one_epoch
 
 			for step in xrange(self.epochs * steps_in_one_epoch + 1):
 				train_data = train_batches.next()
 
-				feed_dict = {self.data: train_data[:, :self.num_unrollings], self.target: train_data[:, 1:], self.input_keep_prob: self.input_keep_prob_value, self.output_keep_prob: self.output_keep_prob_value}	
+				feed_dict = {self.data: train_data[:, :self.num_unrollings], self.target: train_data[:, 1:], self.input_keep_prob: self.train_input_keep_prob, self.output_keep_prob: self.train_output_keep_prob}	
 
 				_, l = self.sess.run([self.optimizer, self.loss], feed_dict=feed_dict)
 
-				assert self.checkpoint_step % steps_in_one_epoch == 0, 'Checkpoint step should be an Epoch'
-
-				if not step % self.checkpoint_step:
-					epoch = step / self.checkpoint_step
+				if not step % checkpoint_step:
+					epoch = step / checkpoint_step
 
 					print('Loss at Epoch %d: %f' % (epoch, l))
