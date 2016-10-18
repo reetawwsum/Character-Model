@@ -18,6 +18,8 @@ class Model:
 		self.batch_size = config.batch_size
 		self.num_unrollings = config.num_unrollings
 		self.checkpoint_epoch = config.checkpoint_epoch
+		self.checkpoint_dir = config.checkpoint_dir
+		self.model_name = config.model_name
 		self.input_size = len(string.ascii_lowercase) + 1
 		self.output_size = self.input_size
 
@@ -101,5 +103,8 @@ class Model:
 
 				if not step % checkpoint_step:
 					epoch = step / checkpoint_step
-
+					self.save(epoch)
 					print('Loss at Epoch %d: %f' % (epoch, l))
+
+	def save(self, global_step):
+		self.saver.save(self.sess, os.path.join(self.checkpoint_dir, self.model_name), global_step=global_step)

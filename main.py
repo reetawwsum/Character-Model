@@ -17,6 +17,7 @@ flags.DEFINE_float('train', True, 'True for training, False for Validating')
 flags.DEFINE_string('dataset_dir', 'data', 'Directory name for the dataset')
 flags.DEFINE_string('checkpoint_dir', 'checkpoint', 'Directory name to save the checkpoint')
 flags.DEFINE_string('dataset', 'text8.zip', 'Name of dataset')
+flags.DEFINE_string('model_name', 'rnn-lstm', 'Name of the model')
 flags.DEFINE_string('batch_dataset_type', 'train_dataset', 'Dataset used for generating training batches')
 flags.DEFINE_string('validation_dataset_type', 'validation_dataset', 'Dataset used for validation')
 FLAGS = flags.FLAGS
