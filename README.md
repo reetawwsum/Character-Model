@@ -1,19 +1,71 @@
 # Character-Model
 Implementation of LSTM character model
 
-## Models implemented
+## Prerequisites
 
-1. Two layer LSTM Network with 10 unrollings - 2 layer (27-64-27)
+1. Python (2.7)
+2. NumPy (1.11.2)
+3. Tensorflow (0.11)
 
-## Libraries used
+## Usage
 
-1. NumPy (1.11.2)
-2. Tensorflow (0.11)
+To train a model with one hidden LSTM layer with 64 units
 
-## How to run
+	$ python main.py --epochs 10000 --batch_size 100 --num_units 64 --num_hidden_layers 1
 
-1. Place **text8.zip** dataset into dataset folder.
-2. Run **character_model.py**.
+To see all options, run:
+
+	$ python main.py -h
+
+which will print:
+
+	usage: main.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE]
+	               [--num_unrollings NUM_UNROLLINGS]
+	               [--validation_size VALIDATION_SIZE] [--num_units NUM_UNITS]
+	               [--num_hidden_layers NUM_HIDDEN_LAYERS]
+	               [--learning_rate LEARNING_RATE]
+	               [--input_keep_prob INPUT_KEEP_PROB]
+	               [--output_keep_prob OUTPUT_KEEP_PROB]
+	               [--checkpoint_epoch CHECKPOINT_EPOCH] [--train TRAIN]
+	               [--dataset_dir DATASET_DIR] [--checkpoint_dir CHECKPOINT_DIR]
+	               [--dataset DATASET] [--model_name MODEL_NAME]
+	               [--batch_dataset_type BATCH_DATASET_TYPE]
+	               [--validation_dataset_type VALIDATION_DATASET_TYPE]
+	
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  --epochs EPOCHS       Epochs to train
+	  --batch_size BATCH_SIZE
+	                        The size of training batch
+	  --num_unrollings NUM_UNROLLINGS
+	                        Input sequence length
+	  --validation_size VALIDATION_SIZE
+	                        Size of validation dataset
+	  --num_units NUM_UNITS
+	                        Number of units in LSTM layer
+	  --num_hidden_layers NUM_HIDDEN_LAYERS
+	                        Number of hidden LSTM layers
+	  --learning_rate LEARNING_RATE
+	                        Initial learning rate
+	  --input_keep_prob INPUT_KEEP_PROB
+	                        Keep probability for LSTM input dropout
+	  --output_keep_prob OUTPUT_KEEP_PROB
+	                        Keep probability for LSTM output dropout
+	  --checkpoint_epoch CHECKPOINT_EPOCH
+	                        After every checkpoint_epoch epochs, checkpoint is
+	                        created
+	  --train TRAIN         True for training, False for Validating
+	  --dataset_dir DATASET_DIR
+	                        Directory name for the dataset
+	  --checkpoint_dir CHECKPOINT_DIR
+	                        Directory name to save the checkpoint
+	  --dataset DATASET     Name of dataset
+	  --model_name MODEL_NAME
+	                        Name of the model
+	  --batch_dataset_type BATCH_DATASET_TYPE
+	                        Dataset used for generating training batches
+	  --validation_dataset_type VALIDATION_DATASET_TYPE
+	                        Dataset used for validation
 
 ## License
 [The MIT License (MIT)](LICENSE)
