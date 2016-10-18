@@ -1,5 +1,5 @@
 # Character-Model
-Implementation of LSTM character model
+Implementation of Recurrent Neural Network (LSTM) character model
 
 ## Prerequisites
 
