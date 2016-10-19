@@ -72,8 +72,6 @@ class BatchGenerator():
 		assert self.train_size % self.batch_size == 0, 'Train size should be divisible by batch size'
 		segment = self.train_size / self.batch_size
 
-		assert segment % self.num_unrollings == 0, 'Segment (train size/batch size) should be divisble by num_unrollings'
-
 		self.cursor = [offset * segment for offset in xrange(self.batch_size)]
 
 	def load_dataset(self):

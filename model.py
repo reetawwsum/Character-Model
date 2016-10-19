@@ -97,7 +97,7 @@ class Model:
 			for step in xrange(self.epochs * steps_in_one_epoch + 1):
 				train_data = train_batches.next()
 
-				feed_dict = {self.data: train_data[:, :self.num_unrollings], self.target: train_data[:, 1:], self.input_keep_prob: self.train_input_keep_prob, self.output_keep_prob: self.train_output_keep_prob}	
+				feed_dict = {self.data: train_data[:, :-1], self.target: train_data[:, 1:], self.input_keep_prob: self.train_input_keep_prob, self.output_keep_prob: self.train_output_keep_prob}	
 
 				_, l = self.sess.run([self.optimizer, self.loss], feed_dict=feed_dict)
 
