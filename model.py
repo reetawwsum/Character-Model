@@ -22,6 +22,8 @@ class Model:
 		self.model_name = config.model_name
 		self.input_size = len(string.ascii_lowercase) + 1
 		self.output_size = self.input_size
+		self.restore_model = config.restore_model
+		self.accuracy_dataset_type = config.validation_dataset_type
 
 		self.build_model()
 
@@ -56,12 +58,27 @@ class Model:
 
 		self.saver = saver
 
+	def accuracy(self):
+		validation_batches = BatchGenerator(self.config)
+
+		validation_log_prob = 0
+
+		for _ in xrange(validation_batches.size):
+			validation_data = validation_batches.next()
+			
+			validation_prediction = self.predict(validation_data)
+			reshaped_validation_prediction = np.reshape(validation_prediction, (1, 1, validation_data.shape[2]))
+
+			validation_log_prob += logprob(reshaped_validation_prediction, validation_data[:, 1:])
+
+		print('Validation set perplexity: %.2f' % float(np.exp(validation_log_prob / validation_data.size)))
+
 	def build_model(self):
 		self.graph = tf.Graph()
 
 		with self.graph.as_default():
 			# Creating placeholder for data and target
-			self.data, self.target = placeholder_input(self.input_size, self.output_size)
+			self.data, self.target = placeholder_input(self.num_unrollings, self.input_size, self.output_size)
 
 			# Creating placeholder for LSTM dropout
 			self.input_keep_prob = placeholder_dropout()
@@ -106,5 +123,22 @@ class Model:
 					self.save(epoch)
 					print('Loss at Epoch %d: %f' % (epoch, l))
 
+	def predict(self, data):
+		with tf.Session(graph=self.graph) as self.sess:
+			self.load()
+
+			feed_dict = {self.data: data[:, :-1], self.input_keep_prob: 1.0, self.output_keep_prob: 1.0}
+
+			prediction = self.sess.run(self.prediction, feed_dict=feed_dict)
+
+			return prediction
+
 	def save(self, global_step):
 		self.saver.save(self.sess, os.path.join(self.checkpoint_dir, self.model_name), global_step=global_step)
+
+	def load(self):
+		try:
+			self.saver.restore(self.sess, os.path.join(self.checkpoint_dir, self.model_name + '-' + str(self.restore_model)))
+		except ValueError:
+			print('Restore model does not exist!')
+			exit()

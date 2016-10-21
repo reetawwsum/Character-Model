@@ -1,8 +1,8 @@
 import tensorflow as tf
 
-def placeholder_input(input_size, output_size):
-	data = tf.placeholder(tf.float32, [None, None, input_size])
-	target = tf.placeholder(tf.float32, [None, None, output_size])
+def placeholder_input(num_unrollings, input_size, output_size):
+	data = tf.placeholder(tf.float32, [None, num_unrollings, input_size])
+	target = tf.placeholder(tf.float32, [None, num_unrollings, output_size])
 
 	return data, target
 

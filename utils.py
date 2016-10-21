@@ -25,6 +25,9 @@ def id2char(charid):
 	else:
 		return ' '
 
+def logprob(prediction, label):
+	return np.sum(np.multiply(label, -np.log(prediction)))
+
 class Dataset:
 	'''Load dataset'''
 	def __init__(self, config, dataset_type):
@@ -58,7 +61,7 @@ class Dataset:
 		return train_text, validation_text
 
 class BatchGenerator():
-	'''Generate train batches'''
+	'''Generate batches'''
 	def __init__(self, config):
 		self.config = config
 		self.batch_size = config.batch_size
@@ -67,24 +70,24 @@ class BatchGenerator():
 		self.batch_dataset_type = config.batch_dataset_type
 
 		self.load_dataset()
-		self.train_size = len(self.train_data)
+		self.size = len(self.data)
 
-		assert self.train_size % self.batch_size == 0, 'Train size should be divisible by batch size'
-		segment = self.train_size / self.batch_size
+		assert self.size % self.batch_size == 0, 'Train size should be divisible by batch size'
+		segment = self.size / self.batch_size
 
 		self.cursor = [offset * segment for offset in xrange(self.batch_size)]
 
 	def load_dataset(self):
 		dataset = Dataset(self.config, self.batch_dataset_type)
-		self.train_data = dataset.data
+		self.data = dataset.data
 
 	def sequence(self, position):
 		'''Generate a sequence from a cursor position'''
 		sequence = np.zeros(shape=(self.num_unrollings + 1, self.input_size), dtype=np.float)
 
 		for i in xrange(self.num_unrollings + 1):
-			sequence[i, char2id(self.train_data[self.cursor[position]])] = 1.0
-			self.cursor[position] = (self.cursor[position] + 1) % self.train_size
+			sequence[i, char2id(self.data[self.cursor[position]])] = 1.0
+			self.cursor[position] = (self.cursor[position] + 1) % self.size
 
 		return sequence
 

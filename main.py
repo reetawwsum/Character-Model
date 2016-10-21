@@ -14,6 +14,7 @@ flags.DEFINE_float('input_keep_prob', 0.5, 'Keep probability for LSTM input drop
 flags.DEFINE_float('output_keep_prob', 0.5, 'Keep probability for LSTM output dropout')
 flags.DEFINE_integer('checkpoint_epoch', 5, 'After every checkpoint_epoch epochs, checkpoint is created')
 flags.DEFINE_float('train', True, 'True for training, False for Validating')
+flags.DEFINE_integer('restore_model', 10000, 'Model to restore to predict')
 flags.DEFINE_string('dataset_dir', 'data', 'Directory name for the dataset')
 flags.DEFINE_string('checkpoint_dir', 'checkpoint', 'Directory name to save the checkpoint')
 flags.DEFINE_string('dataset', 'text8.zip', 'Name of dataset')
@@ -26,12 +27,15 @@ def main(_):
 	# Validating flags
 	assert FLAGS.num_unrollings > 0, 'Input greater sequence length should be greater than 0'
 
-	model = Model(FLAGS)
-
 	if FLAGS.train:
+		model = Model(FLAGS)
 		model.train()
 	else:
-		pass
+		FLAGS.num_unrollings = 1
+		FLAGS.batch_size = 1
+		FLAGS.batch_dataset_type = FLAGS.validation_dataset_type
+		model = Model(FLAGS)
+		model.accuracy()
 
 if __name__ == '__main__':
 	tf.app.run()
