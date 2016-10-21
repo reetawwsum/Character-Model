@@ -9,9 +9,13 @@ Implementation of Recurrent Neural Network (LSTM) character model
 
 ## Usage
 
-To train a model with one hidden LSTM layer with 64 units
+To train a model with one hidden LSTM layer with 64 units:
 
 	$ python main.py --epochs 10000 --batch_size 100 --num_units 64 --num_hidden_layers 1
+
+To check accuracy of an existing model:
+
+	$ python main.py --notrain --restore_model 10000
 
 To see all options, run:
 
@@ -26,12 +30,13 @@ which will print:
 	               [--learning_rate LEARNING_RATE]
 	               [--input_keep_prob INPUT_KEEP_PROB]
 	               [--output_keep_prob OUTPUT_KEEP_PROB]
-	               [--checkpoint_epoch CHECKPOINT_EPOCH] [--train TRAIN]
+	               [--checkpoint_epoch CHECKPOINT_EPOCH] [--train [TRAIN]]
+	               [--notrain] [--restore_model RESTORE_MODEL]
 	               [--dataset_dir DATASET_DIR] [--checkpoint_dir CHECKPOINT_DIR]
 	               [--dataset DATASET] [--model_name MODEL_NAME]
 	               [--batch_dataset_type BATCH_DATASET_TYPE]
 	               [--validation_dataset_type VALIDATION_DATASET_TYPE]
-	
+
 	optional arguments:
 	  -h, --help            show this help message and exit
 	  --epochs EPOCHS       Epochs to train
@@ -54,7 +59,10 @@ which will print:
 	  --checkpoint_epoch CHECKPOINT_EPOCH
 	                        After every checkpoint_epoch epochs, checkpoint is
 	                        created
-	  --train TRAIN         True for training, False for Validating
+	  --train [TRAIN]       True for training, False for Validating
+	  --notrain
+	  --restore_model RESTORE_MODEL
+	                        Model to restore to predict
 	  --dataset_dir DATASET_DIR
 	                        Directory name for the dataset
 	  --checkpoint_dir CHECKPOINT_DIR
