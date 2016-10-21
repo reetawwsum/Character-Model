@@ -108,7 +108,7 @@ class Model:
 
 			train_batches = BatchGenerator(self.config)
 
-			steps_in_one_epoch = ((train_batches.train_size / self.batch_size) / self.num_unrollings)
+			steps_in_one_epoch = ((train_batches.size / self.batch_size) / self.num_unrollings)
 			checkpoint_step = self.checkpoint_epoch * steps_in_one_epoch
 
 			for step in xrange(self.epochs * steps_in_one_epoch + 1):

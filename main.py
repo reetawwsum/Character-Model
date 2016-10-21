@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from model import *
 
 flags = tf.app.flags
@@ -13,7 +11,7 @@ flags.DEFINE_float('learning_rate', 0.001, 'Initial learning rate')
 flags.DEFINE_float('input_keep_prob', 0.5, 'Keep probability for LSTM input dropout')
 flags.DEFINE_float('output_keep_prob', 0.5, 'Keep probability for LSTM output dropout')
 flags.DEFINE_integer('checkpoint_epoch', 5, 'After every checkpoint_epoch epochs, checkpoint is created')
-flags.DEFINE_float('train', True, 'True for training, False for Validating')
+flags.DEFINE_boolean('train', True, 'True for training, False for Validating')
 flags.DEFINE_integer('restore_model', 10000, 'Model to restore to predict')
 flags.DEFINE_string('dataset_dir', 'data', 'Directory name for the dataset')
 flags.DEFINE_string('checkpoint_dir', 'checkpoint', 'Directory name to save the checkpoint')
